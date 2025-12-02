@@ -140,11 +140,30 @@ class StateMachine:
             )
             lead_score = get_lead_score(metrics["total_annual_leak"])
             
-            response["result"] = {
-                "metrics": metrics,
-                "lead_score": lead_score,
-                "formatted_leak": f"${metrics['total_annual_leak']:,.0f}",
-                "formatted_recovery": f"${metrics['recovery_amount']:,.0f}"
+            crm_payload = {
+                "lead_source": "ProfitAdvisor_Chatbot",
+                "business_type": self.data.get("business_type"),
+                "third_party_apps": self.data.get("third_party_apps"),
+                "email": self.data.get("email"),
+                "aov": self.data.get("aov"),
+                "monthly_orders": self.data.get("orders"),
+                "commission_rate": self.data.get("commission"),
+                "monthly_fixed_fee": self.data.get("monthly_fixed_fee"),
+                "calculated_annual_leak": metrics["total_annual_leak"],
+                "estimated_recovery": metrics["recovery_amount"],
+                "lead_score_tag": lead_score
+            }
+
+            return {
+                "valid": True,
+                "state": self.current_state,
+                "data": self.data,
+                "result": {
+                    "formatted_leak": f"${metrics['total_annual_leak']:,.0f}",
+                    "formatted_recovery": f"${metrics['recovery_amount']:,.0f}",
+                    "lead_score": lead_score,
+                    "crm_payload": crm_payload
+                }
             }
             
         return response
