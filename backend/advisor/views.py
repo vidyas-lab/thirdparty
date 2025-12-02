@@ -49,6 +49,8 @@ class ChatView(APIView):
             response_data['prompt'] = "Calculation complete."
         else:
             response_data['prompt'] = sm.get_next_prompt()
+            if 'options' in sm.STATES[result['state']]:
+                response_data['options'] = sm.STATES[result['state']]['options']
 
         return Response(response_data)
 

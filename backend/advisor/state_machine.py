@@ -13,10 +13,17 @@ if os.environ.get("GOOGLE_API_KEY"):
 class StateMachine:
     STATES = {
         "intro": {
-            "next": "aov",
+            "next": "business_type",
             "prompt": "Welcome! I'm your ProfitAdvisor AI. I specialize in quantifying the hidden costs of third-party apps. Ready to see your Annual Profit Leak?",
             "input_type": "button",
-            "validation": lambda x: True # No input validation needed for start button
+            "validation": lambda x: True
+        },
+        "business_type": {
+            "next": "aov",
+            "prompt": "To better tailor your analysis, what best describes your primary business type?",
+            "input_type": "select_button",
+            "options": ["QSR", "Fast Casual", "Full Service", "Other"],
+            "validation": lambda x: x in ["QSR", "Fast Casual", "Full Service", "Other"]
         },
         "aov": {
             "next": "orders",
@@ -37,10 +44,17 @@ class StateMachine:
             "validation": lambda x: 0 < float(x) <= 50
         },
         "fixed_fees": {
-            "next": "email",
+            "next": "third_party_apps",
             "prompt": "Great point! We must include hidden fees. Do you pay any monthly fixed platform fees (e.g., subscription, marketing fee) to third-party apps? (e.g., 100)",
             "input_type": "numeric_float",
             "validation": lambda x: float(x) >= 0
+        },
+        "third_party_apps": {
+            "next": "email",
+            "prompt": "Got it. Which third-party delivery apps do you currently use?",
+            "input_type": "multi_select",
+            "options": ["DoorDash", "Uber Eats", "Grubhub", "SkipTheDishes/Other"],
+            "validation": lambda x: len(x) > 0
         },
         "email": {
             "next": "result",
@@ -91,7 +105,9 @@ class StateMachine:
             }
 
         # Update data
-        if self.current_state == "aov":
+        if self.current_state == "business_type":
+            self.data["business_type"] = user_input
+        elif self.current_state == "aov":
             self.data["aov"] = float(user_input)
         elif self.current_state == "orders":
             self.data["orders"] = int(user_input)
@@ -99,6 +115,8 @@ class StateMachine:
             self.data["commission"] = float(user_input)
         elif self.current_state == "fixed_fees":
             self.data["monthly_fixed_fee"] = float(user_input)
+        elif self.current_state == "third_party_apps":
+            self.data["third_party_apps"] = user_input
         elif self.current_state == "email":
             self.data["email"] = user_input
 
