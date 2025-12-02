@@ -31,10 +31,16 @@ class StateMachine:
             "validation": lambda x: int(x) > 0
         },
         "commission": {
-            "next": "email",
+            "next": "fixed_fees",
             "prompt": "We need the primary pain point: What is the estimated commission rate you pay (e.g., 25, 30)? Please enter as a whole number (%).",
             "input_type": "numeric_float",
             "validation": lambda x: 0 < float(x) <= 50
+        },
+        "fixed_fees": {
+            "next": "email",
+            "prompt": "Great point! We must include hidden fees. Do you pay any monthly fixed platform fees (e.g., subscription, marketing fee) to third-party apps? (e.g., 100)",
+            "input_type": "numeric_float",
+            "validation": lambda x: float(x) >= 0
         },
         "email": {
             "next": "result",
@@ -91,6 +97,8 @@ class StateMachine:
             self.data["orders"] = int(user_input)
         elif self.current_state == "commission":
             self.data["commission"] = float(user_input)
+        elif self.current_state == "fixed_fees":
+            self.data["monthly_fixed_fee"] = float(user_input)
         elif self.current_state == "email":
             self.data["email"] = user_input
 
@@ -109,7 +117,8 @@ class StateMachine:
             metrics = calculate_profit_leak(
                 self.data["aov"], 
                 self.data["orders"], 
-                self.data["commission"]
+                self.data["commission"],
+                self.data.get("monthly_fixed_fee", 0)
             )
             lead_score = get_lead_score(metrics["total_annual_leak"])
             
