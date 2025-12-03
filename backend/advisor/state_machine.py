@@ -33,51 +33,51 @@ class StateMachine:
     STATES = {
         "intro": {
             "next": "business_type",
-            "prompt": "Welcome! I'm your ProfitAdvisor AI. I specialize in quantifying the hidden costs of third-party apps. Ready to see your Annual Profit Leak?",
+            "prompt": "Welcome! I'm your ProfitAdvisor AI. I specialize in quantifying the hidden costs of third-party apps. Ready to see your **Annual Profit Leak**?",
             "input_type": "button",
             "validation": lambda x: True
         },
         "business_type": {
             "next": "aov",
-            "prompt": "To better tailor your analysis, what best describes your primary business type?",
+            "prompt": "To better tailor your analysis, what best describes your primary **business type**?",
             "input_type": "select_button",
             "options": ["QSR", "Fast Casual", "Full Service", "Other"],
             "validation": lambda x: x in ["QSR", "Fast Casual", "Full Service", "Other"]
         },
         "aov": {
             "next": "orders",
-            "prompt": "Excellent. What is your typical average order value (AOV) for third-party orders? (e.g., 35.50)",
+            "prompt": "Excellent. What is your typical **average order value (AOV)** for third-party orders? (e.g., 35.50)",
             "input_type": "numeric_float",
             "validation": lambda x: float(x) > 0
         },
         "orders": {
             "next": "commission",
-            "prompt": "Roughly, how many third-party delivery orders do you process per month? (e.g., 400)",
+            "prompt": "Roughly, how many **third-party delivery orders** do you process per month? (e.g., 400)",
             "input_type": "numeric_int",
             "validation": lambda x: int(x) > 0
         },
         "commission": {
             "next": "fixed_fees",
-            "prompt": "We need the primary pain point: What is the estimated commission rate you pay (e.g., 25, 30)? Please enter as a whole number (%).",
+            "prompt": "We need the primary pain point: What is the estimated **commission rate** you pay (e.g., 25, 30)? Please enter as a whole number (%).",
             "input_type": "numeric_float",
             "validation": lambda x: 0 < float(x) <= 100
         },
         "fixed_fees": {
             "next": "third_party_apps",
-            "prompt": "Great point! We must include hidden fees. Do you pay any monthly fixed platform fees (e.g., subscription, marketing fee) to third-party apps? (e.g., 100)",
+            "prompt": "Great point! We must include hidden fees. Do you pay any **monthly fixed platform fees** (e.g., subscription, marketing fee) to third-party apps? (e.g., 100)",
             "input_type": "numeric_float",
             "validation": lambda x: float(x) >= 0
         },
         "third_party_apps": {
             "next": "email",
-            "prompt": "Got it. Which third-party delivery apps do you currently use?",
+            "prompt": "Got it. Which **third-party delivery apps** do you currently use?",
             "input_type": "multi_select",
             "options": ["DoorDash", "Uber Eats", "Grubhub", "SkipTheDishes/Other"],
             "validation": lambda x: len(x) > 0
         },
         "email": {
             "next": "result",
-            "prompt": "Great! I have all the numbers. To generate and email you the full Profit Recovery Report with the breakdown, what is your email address?",
+            "prompt": "Great! I have all the numbers. To generate the full **Profit Recovery Report** with the breakdown, what is your **email address**?",
             "input_type": "email",
             "validation": lambda x: StateMachine.validate_email_input(x)
         },
