@@ -10,7 +10,28 @@ from datetime import datetime
 
 from .models import Lead
 
-def save_lead(lead_data, lead_id=None):
+import requests
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def get_location_from_ip(ip):
+    try:
+        # Using ip-api.com (Free for non-commercial, 45 req/min)
+        # Note: Free tier is HTTP only
+        response = requests.get(f'http://ip-api.com/json/{ip}')
+        if response.status_code == 200:
+            return response.json()
+    except Exception as e:
+        print(f"Error getting location for IP {ip}: {e}")
+    return {}
+
+def save_lead(lead_data, lead_id=None, request=None):
     try:
         if lead_id:
             lead = Lead.objects.get(id=lead_id)
@@ -21,6 +42,22 @@ def save_lead(lead_data, lead_id=None):
             lead.save()
             return lead.id
         else:
+            # New lead creation
+            ip_address = None
+            location_data = {}
+            
+            if request:
+                ip_address = get_client_ip(request)
+                if ip_address:
+                    # For local testing, use a public IP if local IP is detected
+                    if ip_address == '127.0.0.1':
+                         # Use a dummy public IP for testing (e.g., Google DNS) to verify API works
+                         # In production, this block should be removed or handled differently
+                         # location_data = get_location_from_ip('8.8.8.8') 
+                         pass
+                    else:
+                        location_data = get_location_from_ip(ip_address)
+
             lead = Lead.objects.create(
                 lead_source=lead_data.get('lead_source', 'ProfitAdvisor_Chatbot'),
                 business_type=lead_data.get('business_type'),
@@ -32,7 +69,14 @@ def save_lead(lead_data, lead_id=None):
                 monthly_fixed_fee=lead_data.get('monthly_fixed_fee'),
                 calculated_annual_leak=lead_data.get('calculated_annual_leak'),
                 estimated_recovery=lead_data.get('estimated_recovery'),
-                lead_score_tag=lead_data.get('lead_score_tag')
+                lead_score_tag=lead_data.get('lead_score_tag'),
+                
+                # Location Data
+                ip_address=ip_address,
+                city=location_data.get('city'),
+                region=location_data.get('regionName'),
+                country=location_data.get('country'),
+                country_code=location_data.get('countryCode')
             )
             return lead.id
     except Exception as e:
@@ -97,7 +141,7 @@ class ChatView(APIView):
              })
 
         # Save and get/keep lead_id
-        lead_id = save_lead(lead_data_to_save, lead_id=lead_id)
+        lead_id = save_lead(lead_data_to_save, lead_id=lead_id, request=request)
         result['data']['lead_id'] = lead_id
 
         # If valid, get next prompt (unless it's the result state)

@@ -12,6 +12,14 @@ class Lead(models.Model):
     calculated_annual_leak = models.FloatField(null=True, blank=True)
     estimated_recovery = models.FloatField(null=True, blank=True)
     lead_score_tag = models.CharField(max_length=50, null=True, blank=True)
+    
+    # Location Data
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    country_code = models.CharField(max_length=10, null=True, blank=True)
+
     is_completed = models.BooleanField(default=False)
     consultation_requested = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
