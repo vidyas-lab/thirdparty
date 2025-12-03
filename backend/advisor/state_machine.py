@@ -10,7 +10,26 @@ from .logic import calculate_profit_leak, get_lead_score
 if os.environ.get("GOOGLE_API_KEY"):
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
 class StateMachine:
+    DISPOSABLE_DOMAINS = {
+        'mailinator.com', 'tempmail.com', 'guerrillamail.com', '10minutemail.com', 
+        'yopmail.com', 'trashmail.com', 'getairmail.com', 'sharklasers.com'
+    }
+
+    @staticmethod
+    def validate_email_input(email):
+        try:
+            email = email.strip()
+            validate_email(email)
+            domain = email.split('@')[-1].lower()
+            if domain in StateMachine.DISPOSABLE_DOMAINS:
+                return False
+            return True
+        except ValidationError:
+            return False
     STATES = {
         "intro": {
             "next": "business_type",
@@ -60,7 +79,7 @@ class StateMachine:
             "next": "result",
             "prompt": "Great! I have all the numbers. To generate and email you the full Profit Recovery Report with the breakdown, what is your email address?",
             "input_type": "email",
-            "validation": lambda x: re.match(r"[^@]+@[^@]+\.[^@]+", x) is not None
+            "validation": lambda x: StateMachine.validate_email_input(x)
         },
         "result": {
             "next": "end",
@@ -89,12 +108,20 @@ class StateMachine:
     def process_input(self, user_input):
         state_config = self.STATES[self.current_state]
         
+        # Strip string input
+        if isinstance(user_input, str):
+            user_input = user_input.strip()
+        
         # Validate input
         try:
             if not state_config["validation"](user_input):
+                message = "Invalid input. Please try again."
+                if self.current_state == "email":
+                    message = "the email you entered isnt correct please try again"
+                    
                 return {
                     "valid": False,
-                    "message": "Invalid input. Please try again.",
+                    "message": message,
                     "state": self.current_state
                 }
         except ValueError:
