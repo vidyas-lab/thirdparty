@@ -155,6 +155,34 @@ class StateMachine:
                 "lead_score_tag": lead_score
             }
 
+            # Calculate percentages
+            total = metrics["total_annual_leak"]
+            breakdown = {}
+            
+            if total > 0:
+                breakdown = {
+                    "commission_loss": {
+                        "value": metrics["annual_commission_loss"],
+                        "percentage": (metrics["annual_commission_loss"] / total) * 100,
+                        "formatted": f"${metrics['annual_commission_loss']:,.0f}"
+                    },
+                    "payment_fee_leak": {
+                        "value": metrics["annual_payment_fee_leak"],
+                        "percentage": (metrics["annual_payment_fee_leak"] / total) * 100,
+                        "formatted": f"${metrics['annual_payment_fee_leak']:,.0f}"
+                    },
+                    "fixed_fee_loss": {
+                        "value": metrics["annual_fixed_fee_loss"],
+                        "percentage": (metrics["annual_fixed_fee_loss"] / total) * 100,
+                        "formatted": f"${metrics['annual_fixed_fee_loss']:,.0f}"
+                    },
+                    "lost_customer_value": {
+                        "value": metrics["lclv"],
+                        "percentage": (metrics["lclv"] / total) * 100,
+                        "formatted": f"${metrics['lclv']:,.0f}"
+                    }
+                }
+
             return {
                 "valid": True,
                 "state": self.current_state,
@@ -163,6 +191,7 @@ class StateMachine:
                     "formatted_leak": f"${metrics['total_annual_leak']:,.0f}",
                     "formatted_recovery": f"${metrics['recovery_amount']:,.0f}",
                     "lead_score": lead_score,
+                    "breakdown": breakdown,
                     "crm_payload": crm_payload
                 }
             }
