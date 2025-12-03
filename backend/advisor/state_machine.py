@@ -41,7 +41,7 @@ class StateMachine:
             "next": "fixed_fees",
             "prompt": "We need the primary pain point: What is the estimated commission rate you pay (e.g., 25, 30)? Please enter as a whole number (%).",
             "input_type": "numeric_float",
-            "validation": lambda x: 0 < float(x) <= 50
+            "validation": lambda x: 0 < float(x) <= 100
         },
         "fixed_fees": {
             "next": "third_party_apps",
