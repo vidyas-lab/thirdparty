@@ -46,7 +46,7 @@ class StateMachine:
         },
         "aov": {
             "next": "orders",
-            "prompt": "Excellent. What is your typical **average order value (AOV)** for third-party orders? (e.g., 35.50)",
+            "prompt": "Excellent. What is your typical **average order value** for third-party orders? (e.g., 35.50)",
             "input_type": "numeric_float",
             "validation": lambda x: float(x) > 0
         },
