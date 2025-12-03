@@ -1,0 +1,66 @@
+[
+    {
+        "email": "test@example.com",
+        "aov": 50,
+        "orders": 100,
+        "timestamp": "2025-12-03T03:36:49.641886"
+    },
+    {
+        "email": "full_test@example.com",
+        "aov": 65.5,
+        "orders": 250,
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "Uber Eats",
+            "DoorDash"
+        ],
+        "commission_rate": 25,
+        "monthly_fixed_fee": 50,
+        "timestamp": "2025-12-03T03:38:49.106742"
+    },
+    {
+        "email": "full_test@example.com",
+        "aov": 65.5,
+        "orders": 250,
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "Uber Eats",
+            "DoorDash"
+        ],
+        "commission_rate": 25,
+        "monthly_fixed_fee": 50,
+        "timestamp": "2025-12-03T03:41:55.601773"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "Grubhub"
+        ],
+        "email": "vidya@gmail.com",
+        "aov": 50,
+        "monthly_orders": 100,
+        "commission_rate": 10,
+        "monthly_fixed_fee": 500,
+        "calculated_annual_leak": 36360,
+        "estimated_recovery": 35742,
+        "lead_score_tag": "L-Score: Medium",
+        "timestamp": "2025-12-03T03:45:26.995634"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "Grubhub"
+        ],
+        "email": "vidya@gmail.com",
+        "aov": 50,
+        "monthly_orders": 100,
+        "commission_rate": 10,
+        "monthly_fixed_fee": 500,
+        "calculated_annual_leak": 36360,
+        "estimated_recovery": 35742,
+        "lead_score_tag": "L-Score: Medium",
+        "timestamp": "2025-12-03T03:45:33.576141"
+    }
+]

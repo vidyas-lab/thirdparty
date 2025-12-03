@@ -3,6 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .state_machine import StateMachine
+import os
+import json
+from django.conf import settings
+from datetime import datetime
 
 class ChatView(APIView):
     def post(self, request):
@@ -56,14 +60,34 @@ class ChatView(APIView):
 
 class LeadView(APIView):
     def post(self, request):
-        # This endpoint would handle the final CRM hand-off
-        # For now, we just echo back the data as a confirmation
         lead_data = request.data
         
-        # In a real app, save to DB or send to CRM here
+        # Define path to JSON file
+        data_dir = os.path.join(settings.BASE_DIR, 'data')
+        os.makedirs(data_dir, exist_ok=True)
+        file_path = os.path.join(data_dir, 'leads.json')
+        
+        leads = []
+        
+        # Read existing data
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, 'r') as f:
+                    leads = json.load(f)
+            except json.JSONDecodeError:
+                leads = []
+        
+        # Append new lead
+        # Add a timestamp for better record keeping
+        lead_data['timestamp'] = datetime.now().isoformat()
+        leads.append(lead_data)
+        
+        # Write back to file
+        with open(file_path, 'w') as f:
+            json.dump(leads, f, indent=4)
         
         return Response({
             "status": "success",
-            "message": "Lead received",
+            "message": "Lead received and saved",
             "lead_data": lead_data
         })
