@@ -4,7 +4,7 @@ class Lead(models.Model):
     lead_source = models.CharField(max_length=100, default="ProfitAdvisor_Chatbot")
     business_type = models.CharField(max_length=100, null=True, blank=True)
     third_party_apps = models.JSONField(default=list, null=True, blank=True)
-    email = models.EmailField(max_length=254)
+    email = models.EmailField(max_length=254, null=True, blank=True)
     aov = models.FloatField(null=True, blank=True)
     monthly_orders = models.IntegerField(null=True, blank=True)
     commission_rate = models.FloatField(null=True, blank=True)

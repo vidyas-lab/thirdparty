@@ -52,10 +52,7 @@ class ChatView(APIView):
         sm = StateMachine(current_state=current_state, data=data)
 
         if user_input is None and current_state == 'intro':
-            # Initial load - create a new lead
-            lead_id = save_lead({}, lead_id=None)
-            data['lead_id'] = lead_id
-            
+            # Initial load - just return the prompt, do NOT create a lead yet
             return Response({
                 'state': 'intro',
                 'prompt': sm.get_prompt(),
