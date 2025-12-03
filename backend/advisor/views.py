@@ -8,6 +8,33 @@ import json
 from django.conf import settings
 from datetime import datetime
 
+def save_lead_to_json(lead_data):
+    # Define path to JSON file
+    data_dir = os.path.join(settings.BASE_DIR, 'data')
+    os.makedirs(data_dir, exist_ok=True)
+    file_path = os.path.join(data_dir, 'leads.json')
+    
+    leads = []
+    
+    # Read existing data
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r') as f:
+                leads = json.load(f)
+        except json.JSONDecodeError:
+            leads = []
+    
+    # Append new lead
+    # Add a timestamp if not present
+    if 'timestamp' not in lead_data:
+        lead_data['timestamp'] = datetime.now().isoformat()
+        
+    leads.append(lead_data)
+    
+    # Write back to file
+    with open(file_path, 'w') as f:
+        json.dump(leads, f, indent=4)
+
 class ChatView(APIView):
     def post(self, request):
         current_state = request.data.get('current_state', 'intro')
@@ -51,6 +78,11 @@ class ChatView(APIView):
             response_data['result'] = result['result']
             # No prompt needed for result state as UI handles it, but we can send a completion message
             response_data['prompt'] = "Calculation complete."
+            
+            # Auto-save the lead
+            if 'crm_payload' in result['result']:
+                save_lead_to_json(result['result']['crm_payload'])
+                
         else:
             response_data['prompt'] = sm.get_next_prompt()
             if 'options' in sm.STATES[result['state']]:
@@ -61,30 +93,7 @@ class ChatView(APIView):
 class LeadView(APIView):
     def post(self, request):
         lead_data = request.data
-        
-        # Define path to JSON file
-        data_dir = os.path.join(settings.BASE_DIR, 'data')
-        os.makedirs(data_dir, exist_ok=True)
-        file_path = os.path.join(data_dir, 'leads.json')
-        
-        leads = []
-        
-        # Read existing data
-        if os.path.exists(file_path):
-            try:
-                with open(file_path, 'r') as f:
-                    leads = json.load(f)
-            except json.JSONDecodeError:
-                leads = []
-        
-        # Append new lead
-        # Add a timestamp for better record keeping
-        lead_data['timestamp'] = datetime.now().isoformat()
-        leads.append(lead_data)
-        
-        # Write back to file
-        with open(file_path, 'w') as f:
-            json.dump(leads, f, indent=4)
+        save_lead_to_json(lead_data)
         
         return Response({
             "status": "success",

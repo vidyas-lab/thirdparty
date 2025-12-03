@@ -58,7 +58,7 @@ class StateMachine:
         },
         "email": {
             "next": "result",
-            "prompt": "Great! I have all the numbers. To generate and email you the full Profit Recovery Report with the breakdown, what is your best email address?",
+            "prompt": "Great! I have all the numbers. To generate and email you the full Profit Recovery Report with the breakdown, what is your email address?",
             "input_type": "email",
             "validation": lambda x: re.match(r"[^@]+@[^@]+\.[^@]+", x) is not None
         },

@@ -62,5 +62,37 @@
         "estimated_recovery": 35742,
         "lead_score_tag": "L-Score: Medium",
         "timestamp": "2025-12-03T03:45:33.576141"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "QSR",
+        "third_party_apps": [
+            "Grubhub"
+        ],
+        "email": "autosave_test@example.com",
+        "aov": 45.0,
+        "monthly_orders": 300,
+        "commission_rate": 30,
+        "monthly_fixed_fee": 100,
+        "calculated_annual_leak": 115572.0,
+        "estimated_recovery": 113033.4,
+        "lead_score_tag": "L-Score: HIGH PRIORITY",
+        "timestamp": "2025-12-03T03:48:26.116013"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "DoorDash"
+        ],
+        "email": "hasith@gmail.com",
+        "aov": 50,
+        "monthly_orders": 400,
+        "commission_rate": 30,
+        "monthly_fixed_fee": 100,
+        "calculated_annual_leak": 170640.0,
+        "estimated_recovery": 166908.0,
+        "lead_score_tag": "L-Score: HIGH PRIORITY",
+        "timestamp": "2025-12-03T03:49:36.083646"
     }
 ]
