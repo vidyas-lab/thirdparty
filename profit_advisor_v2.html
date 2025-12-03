@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProfitAdvisor AI - Profit Leak Calculator</title>
+    <title>Profit Leakage Calculator - Profit Leak Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,7 +23,7 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #F3F4F6;
@@ -92,18 +93,22 @@
         ::-webkit-scrollbar {
             width: 6px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #f1f1f1;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #d1d5db; 
+            background: #d1d5db;
             border-radius: 3px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af; 
+            background: #9ca3af;
         }
     </style>
 </head>
+
 <body class="h-screen flex flex-col overflow-hidden">
 
     <!-- HEADER -->
@@ -111,26 +116,29 @@
         <div class="max-w-3xl mx-auto">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-applova-red rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                    <div
+                        class="w-10 h-10 bg-applova-red rounded-lg flex items-center justify-center text-white font-bold text-xl">
                         P
                     </div>
                     <div>
-                        <h1 class="font-bold text-gray-900 text-lg leading-tight">ProfitAdvisor AI</h1>
+                        <h1 class="font-bold text-gray-900 text-lg leading-tight">Profit Leakage Calculator</h1>
                         <p class="text-xs text-gray-500">Profit Leak Quantifier</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full border border-green-100">
                     <span class="relative flex h-2.5 w-2.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                     </span>
                     <span class="text-xs font-semibold text-green-700">Live Analysis</span>
                 </div>
             </div>
-            
+
             <!-- PROGRESS BAR -->
             <div class="w-full bg-gray-100 rounded-full h-2.5">
-                <div id="progressBar" class="bg-applova-red h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                <div id="progressBar" class="bg-applova-red h-2.5 rounded-full transition-all duration-500 ease-out"
+                    style="width: 0%"></div>
             </div>
         </div>
     </header>
@@ -150,19 +158,25 @@
     </footer>
 
     <!-- CONFIRMATION MODAL -->
-    <div id="confirmationModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm text-center transform transition-all duration-300 scale-100">
-            <svg class="w-16 h-16 mx-auto text-applova-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    <div id="confirmationModal"
+        class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm text-center transform transition-all duration-300 scale-100">
+            <svg class="w-16 h-16 mx-auto text-applova-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Report Delivered!</h2>
-            <p class="text-sm text-gray-600 mb-4">Your detailed <strong>Profit Recovery Report</strong> has been sent to:</p>
+            <p class="text-sm text-gray-600 mb-4">Your detailed <strong>Profit Recovery Report</strong> has been sent
+                to:</p>
             <p id="modalEmail" class="text-lg font-semibold text-applova-red mb-6 break-all"></p>
-            
+
             <p class="text-sm font-medium text-gray-700 mb-2">Applova is ready to help you recover:</p>
             <p id="modalRecoveryAmount" class="text-3xl font-extrabold text-applova-red mb-6"></p>
 
-            <button onclick="closeModal()" class="w-full bg-applova-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition duration-200">
+            <button onclick="closeModal()"
+                class="w-full bg-applova-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition duration-200">
                 Close & Check Email
             </button>
         </div>
@@ -179,7 +193,7 @@
         const STATE_MACHINE = {
             intro: {
                 next: 'business_type',
-                prompt: "Welcome! I'm your ProfitAdvisor AI. I specialize in quantifying the hidden costs of third-party apps. Ready to see your Annual Profit Leak?",
+                prompt: "Welcome! I'm your Profit Leakage Calculator. I specialize in quantifying the hidden costs of third-party apps. Ready to see your Annual Profit Leak?",
                 inputType: 'button',
                 buttonText: 'Start Recovery Now'
             },
@@ -234,7 +248,7 @@
         };
 
         const STEP_KEYS = Object.keys(STATE_MACHINE);
-        
+
         // --- 2. STATE MANAGEMENT ---
         let currentState = 'intro';
         let userData = {};
@@ -262,14 +276,14 @@
         function addMessage(text, sender) {
             const div = document.createElement('div');
             div.className = sender === 'bot' ? 'flex justify-start' : 'flex justify-end';
-            
+
             const bubble = document.createElement('div');
             bubble.className = sender === 'bot' ? 'chat-bubble-bot' : 'chat-bubble-user';
             bubble.innerHTML = text; // Allow HTML for bolding
-            
+
             div.appendChild(bubble);
             messagesArea.appendChild(div);
-            
+
             // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -296,13 +310,13 @@
             let displayValue = value;
             if (Array.isArray(value)) displayValue = value.join(', ');
             if (currentState !== 'intro') { // Don't show "Start" button click as message if preferred, but usually good to show
-                 addMessage(displayValue, 'user');
+                addMessage(displayValue, 'user');
             }
 
             // Transition
             currentState = config.next;
             updateProgressBar();
-            
+
             if (currentState === 'result') {
                 displayResults();
             } else {
@@ -312,7 +326,7 @@
 
         function renderState() {
             const config = STATE_MACHINE[currentState];
-            
+
             // Show Bot Prompt
             // Simulate typing delay?
             setTimeout(() => {
@@ -330,7 +344,7 @@
                 btn.textContent = config.buttonText;
                 btn.onclick = () => handleInput('Start');
                 inputArea.appendChild(btn);
-            } 
+            }
             else if (config.inputType === 'select') {
                 const grid = document.createElement('div');
                 grid.className = 'grid grid-cols-2 gap-2';
@@ -346,12 +360,12 @@
             else if (config.inputType === 'multi_select') {
                 const container = document.createElement('div');
                 container.className = 'space-y-3';
-                
+
                 const grid = document.createElement('div');
                 grid.className = 'grid grid-cols-2 gap-2';
-                
+
                 let selected = [];
-                
+
                 config.options.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'py-3 px-4 rounded-lg border-2 font-medium transition-colors bg-white border-gray-200 text-gray-700 hover:border-red-200';
@@ -367,7 +381,7 @@
                     };
                     grid.appendChild(btn);
                 });
-                
+
                 const confirmBtn = document.createElement('button');
                 confirmBtn.className = 'btn-primary';
                 confirmBtn.textContent = 'Confirm Selection';
@@ -375,7 +389,7 @@
                     if (selected.length > 0) handleInput(selected);
                     else alert("Please select at least one option.");
                 };
-                
+
                 container.appendChild(grid);
                 container.appendChild(confirmBtn);
                 inputArea.appendChild(container);
@@ -404,7 +418,7 @@
                 form.appendChild(input);
                 form.appendChild(btn);
                 inputArea.appendChild(form);
-                
+
                 // Focus input
                 setTimeout(() => input.focus(), 100);
             }
@@ -413,12 +427,12 @@
         // --- 5. CALCULATION LOGIC ---
         function calculateProfitLeak() {
             const { aov, orders, commission, monthly_fixed_fee } = userData;
-            
+
             const annual_commission_loss = (aov * orders * (commission / 100)) * ANNUAL_MONTHS;
             const annual_payment_fee_leak = (aov * orders * ANNUAL_MONTHS) * (TPD_FEE - APPLOVA_FEE);
             const annual_fixed_fee_loss = monthly_fixed_fee * ANNUAL_MONTHS;
             const lclv = (aov * orders * ANNUAL_MONTHS) * LTV_UPLIFT_FACTOR;
-            
+
             const total_annual_leak = annual_commission_loss + annual_payment_fee_leak + lclv + annual_fixed_fee_loss;
             const recovery_amount = ((annual_commission_loss + annual_payment_fee_leak + annual_fixed_fee_loss) * RECOVERY_EFFICIENCY) + lclv;
 
@@ -438,7 +452,7 @@
 
         function displayResults() {
             inputArea.innerHTML = ''; // Clear inputs
-            
+
             const metrics = calculateProfitLeak();
             calculationResult = metrics; // Store for modal
 
@@ -458,7 +472,7 @@
                     </div>
                 </div>
             `;
-            
+
             // 2. Breakdown Visualization
             const breakdownHTML = renderProfitBreakdown(metrics);
 
@@ -486,7 +500,7 @@
 
         function renderProfitBreakdown(metrics) {
             const total = metrics.total_annual_leak;
-            
+
             const items = [
                 { name: 'Commission Loss', value: metrics.annual_commission_loss, color: 'bg-red-500' },
                 { name: 'Payment Fee Leak', value: metrics.annual_payment_fee_leak, color: 'bg-orange-500' },
@@ -530,7 +544,7 @@
             modalEmail.textContent = userData.email;
             modalRecoveryAmount.textContent = formatCurrency(calculationResult.recovery_amount);
             confirmationModal.classList.remove('hidden');
-            
+
             // Log to console (CRM Hand-off simulation)
             console.log("CRM PAYLOAD:", {
                 lead_source: "ProfitAdvisor_Chatbot_V2",
@@ -553,4 +567,5 @@
 
     </script>
 </body>
+
 </html>

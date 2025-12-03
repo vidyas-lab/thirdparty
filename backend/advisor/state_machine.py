@@ -33,7 +33,7 @@ class StateMachine:
     STATES = {
         "intro": {
             "next": "business_type",
-            "prompt": "Welcome! I'm your ProfitAdvisor AI. I specialize in quantifying the hidden costs of third-party apps. Ready to see your **Annual Profit Leak**?",
+            "prompt": "Welcome! I'm your Profit Leakage Calculator. I specialize in quantifying the hidden costs of third-party apps. Ready to see your **Annual Profit Leak**?",
             "input_type": "button",
             "validation": lambda x: True
         },
