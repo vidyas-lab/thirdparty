@@ -94,5 +94,39 @@
         "estimated_recovery": 166908.0,
         "lead_score_tag": "L-Score: HIGH PRIORITY",
         "timestamp": "2025-12-03T03:49:36.083646"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "QSR",
+        "third_party_apps": [
+            "SkipTheDishes/Other",
+            "Uber Eats"
+        ],
+        "email": "vidya@gmail.com",
+        "aov": 40.52,
+        "monthly_orders": 600,
+        "commission_rate": 25,
+        "monthly_fixed_fee": 200,
+        "calculated_annual_leak": 193784.06400000007,
+        "estimated_recovery": 189929.74080000006,
+        "lead_score_tag": "L-Score: HIGH PRIORITY",
+        "timestamp": "2025-12-03T04:46:45.858882"
+    },
+    {
+        "lead_source": "ProfitAdvisor_Chatbot",
+        "business_type": "Fast Casual",
+        "third_party_apps": [
+            "Grubhub",
+            "DoorDash"
+        ],
+        "email": "vidya@gmail.com",
+        "aov": 50,
+        "monthly_orders": 100,
+        "commission_rate": 25,
+        "monthly_fixed_fee": 100,
+        "calculated_annual_leak": 40560.0,
+        "estimated_recovery": 39732.0,
+        "lead_score_tag": "L-Score: Medium",
+        "timestamp": "2025-12-03T05:38:06.807458"
     }
 ]

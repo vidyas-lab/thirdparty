@@ -1,0 +1,20 @@
+from django.db import models
+
+class Lead(models.Model):
+    lead_source = models.CharField(max_length=100, default="ProfitAdvisor_Chatbot")
+    business_type = models.CharField(max_length=100, null=True, blank=True)
+    third_party_apps = models.JSONField(default=list, null=True, blank=True)
+    email = models.EmailField(max_length=254)
+    aov = models.FloatField(null=True, blank=True)
+    monthly_orders = models.IntegerField(null=True, blank=True)
+    commission_rate = models.FloatField(null=True, blank=True)
+    monthly_fixed_fee = models.FloatField(null=True, blank=True)
+    calculated_annual_leak = models.FloatField(null=True, blank=True)
+    estimated_recovery = models.FloatField(null=True, blank=True)
+    lead_score_tag = models.CharField(max_length=50, null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
+    consultation_requested = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.email} - {self.created_at}"

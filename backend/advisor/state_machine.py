@@ -142,6 +142,7 @@ class StateMachine:
             
             crm_payload = {
                 "lead_source": "ProfitAdvisor_Chatbot",
+                "lead_id": self.data.get("lead_id"),
                 "business_type": self.data.get("business_type"),
                 "third_party_apps": self.data.get("third_party_apps"),
                 "email": self.data.get("email"),
