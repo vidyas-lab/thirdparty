@@ -12,6 +12,36 @@ from .models import Lead
 
 import requests
 
+def save_lead_to_json(lead_data):
+    # Define path to JSON file
+    data_dir = os.path.join(settings.BASE_DIR, 'data')
+    os.makedirs(data_dir, exist_ok=True)
+    file_path = os.path.join(data_dir, 'leads.json')
+    
+    leads = []
+    
+    # Read existing data
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r') as f:
+                leads = json.load(f)
+        except json.JSONDecodeError:
+            leads = []
+    
+    # Append new lead
+    # Add a timestamp if not present
+    if 'timestamp' not in lead_data:
+        from datetime import timedelta, timezone
+        # Sri Lanka is UTC+5:30
+        sl_timezone = timezone(timedelta(hours=5, minutes=30))
+        lead_data['timestamp'] = datetime.now(sl_timezone).isoformat()
+        
+    leads.append(lead_data)
+    
+    # Write back to file
+    with open(file_path, 'w') as f:
+        json.dump(leads, f, indent=4)
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -116,8 +146,6 @@ class ChatView(APIView):
                 'input_type': sm.STATES[result['state']]['input_type'],
                 'data': data
             })
-
-        # Save progress
         # Extract data to save from result['data']
         # We need to map the flat data structure to our model fields
         lead_data_to_save = {

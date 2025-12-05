@@ -128,5 +128,10 @@
         "estimated_recovery": 39732.0,
         "lead_score_tag": "L-Score: Medium",
         "timestamp": "2025-12-03T05:38:06.807458"
+    },
+    {
+        "email": "timezone_test@example.com",
+        "test": true,
+        "timestamp": "2025-12-05T11:20:02.565699+05:30"
     }
 ]
