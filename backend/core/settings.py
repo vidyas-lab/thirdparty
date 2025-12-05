@@ -62,6 +62,22 @@ DATABASES = {
     }
 }
 
+# Cloud SQL Configuration
+if os.environ.get('DB_HOST'):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': '3306',
+    }
+    
+    # If using Cloud SQL Connector (recommended for Cloud Run)
+    if os.environ.get('INSTANCE_CONNECTION_NAME'):
+        DATABASES['default']['HOST'] = '/cloudsql/' + os.environ.get('INSTANCE_CONNECTION_NAME')
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

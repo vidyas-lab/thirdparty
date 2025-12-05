@@ -4,3 +4,6 @@ google-generativeai
 python-dotenv
 django-cors-headers
 gunicorn
+mysqlclient
+
+dnspython

@@ -2,8 +2,9 @@
 import re
 import google.generativeai as genai
 import os
+import dns.resolver
 from django.conf import settings
-from .logic import calculate_profit_leak, get_lead_score
+from .logic import calculate_profit_gain, get_lead_score
 
 # Configure Gemini
 # Note: In a real scenario, ensure GOOGLE_API_KEY is set in environment variables
@@ -25,8 +26,26 @@ class StateMachine:
             email = email.strip()
             validate_email(email)
             domain = email.split('@')[-1].lower()
+            username = email.split('@')[0]
+            
+            if len(username) < 2:
+                return False
+                
             if domain in StateMachine.DISPOSABLE_DOMAINS:
                 return False
+
+            # DNS MX Record Check
+            try:
+                records = dns.resolver.resolve(domain, 'MX')
+                if not records:
+                    return False
+            except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.NoNameservers, dns.resolver.Timeout):
+                # Fallback: try A record if no MX record (some domains use A record for mail)
+                try:
+                    dns.resolver.resolve(domain, 'A')
+                except Exception:
+                    return False
+            
             return True
         except ValidationError:
             return False
@@ -159,13 +178,18 @@ class StateMachine:
 
         if self.current_state == "result":
             # Perform calculation
-            metrics = calculate_profit_leak(
+            metrics = calculate_profit_gain(
                 self.data["aov"], 
                 self.data["orders"], 
                 self.data["commission"],
                 self.data.get("monthly_fixed_fee", 0)
             )
-            lead_score = get_lead_score(metrics["total_annual_leak"])
+            
+            # Calculate total leak equivalent for backward compatibility
+            # In the new model, this is roughly the sum of savings + lclv gain
+            total_leak_equivalent = metrics["commission_fee_savings"] + metrics["fixed_fee_savings"] + metrics["lclv_gain"]
+            
+            lead_score = get_lead_score(metrics["total_profit_gain_potential"])
             
             crm_payload = {
                 "lead_source": "ProfitAdvisor_Chatbot",
@@ -177,36 +201,36 @@ class StateMachine:
                 "monthly_orders": self.data.get("orders"),
                 "commission_rate": self.data.get("commission"),
                 "monthly_fixed_fee": self.data.get("monthly_fixed_fee"),
-                "calculated_annual_leak": metrics["total_annual_leak"],
-                "estimated_recovery": metrics["recovery_amount"],
+                "calculated_annual_leak": total_leak_equivalent,
+                "estimated_recovery": metrics["total_profit_gain_potential"],
                 "lead_score_tag": lead_score
             }
 
             # Calculate percentages
-            total = metrics["total_annual_leak"]
+            total = total_leak_equivalent
             breakdown = {}
             
             if total > 0:
                 breakdown = {
                     "commission_loss": {
-                        "value": metrics["annual_commission_loss"],
-                        "percentage": (metrics["annual_commission_loss"] / total) * 100,
-                        "formatted": f"${metrics['annual_commission_loss']:,.0f}"
+                        "value": metrics["commission_fee_savings"],
+                        "percentage": (metrics["commission_fee_savings"] / total) * 100,
+                        "formatted": f"${metrics['commission_fee_savings']:,.0f}"
                     },
                     "payment_fee_leak": {
-                        "value": metrics["annual_payment_fee_leak"],
-                        "percentage": (metrics["annual_payment_fee_leak"] / total) * 100,
-                        "formatted": f"${metrics['annual_payment_fee_leak']:,.0f}"
+                        "value": 0,
+                        "percentage": 0,
+                        "formatted": "$0"
                     },
                     "fixed_fee_loss": {
-                        "value": metrics["annual_fixed_fee_loss"],
-                        "percentage": (metrics["annual_fixed_fee_loss"] / total) * 100,
-                        "formatted": f"${metrics['annual_fixed_fee_loss']:,.0f}"
+                        "value": metrics["fixed_fee_savings"],
+                        "percentage": (metrics["fixed_fee_savings"] / total) * 100,
+                        "formatted": f"${metrics['fixed_fee_savings']:,.0f}"
                     },
                     "lost_customer_value": {
-                        "value": metrics["lclv"],
-                        "percentage": (metrics["lclv"] / total) * 100,
-                        "formatted": f"${metrics['lclv']:,.0f}"
+                        "value": metrics["lclv_gain"],
+                        "percentage": (metrics["lclv_gain"] / total) * 100,
+                        "formatted": f"${metrics['lclv_gain']:,.0f}"
                     }
                 }
 
@@ -215,8 +239,8 @@ class StateMachine:
                 "state": self.current_state,
                 "data": self.data,
                 "result": {
-                    "formatted_leak": f"${metrics['total_annual_leak']:,.0f}",
-                    "formatted_recovery": f"${metrics['recovery_amount']:,.0f}",
+                    "formatted_leak": f"${total_leak_equivalent:,.0f}",
+                    "formatted_recovery": f"${metrics['total_profit_gain_potential']:,.0f}",
                     "lead_score": lead_score,
                     "breakdown": breakdown,
                     "crm_payload": crm_payload

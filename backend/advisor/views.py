@@ -142,7 +142,7 @@ class ChatView(APIView):
                 'valid': False,
                 'message': result['message'],
                 'state': result['state'],
-                'prompt': sm.get_prompt(), # Return same prompt
+                'prompt': result['message'], # Show error message to user
                 'input_type': sm.STATES[result['state']]['input_type'],
                 'data': data
             })
