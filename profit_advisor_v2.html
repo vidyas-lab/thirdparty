@@ -199,13 +199,13 @@
             },
             business_type: {
                 next: 'aov',
-                prompt: "To better tailor your analysis, what best describes your primary business type?",
+                prompt: "What <strong>type of restaurant</strong> do you operate?",
                 inputType: 'select',
                 options: ['QSR', 'Fast Casual', 'Full Service', 'Other']
             },
             aov: {
                 next: 'orders',
-                prompt: "Excellent. What is your typical <strong>average order value (AOV)</strong> for third-party orders? (e.g., 35.50)",
+                prompt: "Excellent. What is your typical <strong>average order value (AOV)</strong> for third-party orders? (e.g., $35.50)",
                 inputType: 'numeric_float',
                 validation: (val) => parseFloat(val) > 0
             },
@@ -217,21 +217,21 @@
             },
             commission: {
                 next: 'fixed_fees',
-                prompt: "We need the primary pain point: What is the estimated <strong>commission rate</strong> you pay (e.g., 25, 30)? Please enter as a whole number (%).",
+                prompt: "Considering all your delivery partners (DoorDash, UberEats, GrubHub), what is the <strong> average commission rate </strong> they take from your orders? (e.g., 25, 30) %",
                 inputType: 'numeric_float',
                 validation: (val) => parseFloat(val) > 0 && parseFloat(val) <= 50
             },
             fixed_fees: {
                 next: 'third_party_apps',
-                prompt: "Great point! We must include hidden fees. Do you pay any <strong>monthly fixed platform fees</strong> (e.g., subscription, marketing fee) to third-party apps? (e.g., 100)",
+                prompt: "Great point! We must include hidden fees. Do you pay any <strong>monthly fixed platform fees</strong> (e.g., subscription, marketing fee) to third-party apps? (e.g., $100)",
                 inputType: 'numeric_float',
                 validation: (val) => parseFloat(val) >= 0
             },
             third_party_apps: {
                 next: 'email',
-                prompt: "Got it. Which third-party delivery apps do you currently use?",
+                prompt: "Got it. Which third-party delivery apps do you currently use? You can select multiple.",
                 inputType: 'multi_select',
-                options: ['DoorDash', 'Uber Eats', 'Grubhub', 'SkipTheDishes/Other'],
+                options: ['DoorDash', 'Uber Eats', 'Grubhub', 'Other'],
                 validation: (val) => val && val.length > 0
             },
             email: {
@@ -503,7 +503,6 @@
 
             const items = [
                 { name: 'Commission Loss', value: metrics.annual_commission_loss, color: 'bg-red-500' },
-                { name: 'Payment Fee Leak', value: metrics.annual_payment_fee_leak, color: 'bg-orange-500' },
                 { name: 'Fixed Fee Loss', value: metrics.annual_fixed_fee_loss, color: 'bg-yellow-500' },
                 { name: 'Lost Customer Value', value: metrics.lclv, color: 'bg-gray-800' }
             ];
