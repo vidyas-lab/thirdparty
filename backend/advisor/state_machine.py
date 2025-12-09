@@ -136,7 +136,7 @@ class StateMachine:
             if not state_config["validation"](user_input):
                 message = "Invalid input. Please try again."
                 if self.current_state == "email":
-                    message = "the email you entered isnt correct please try again"
+                    message = "the email you entered isn't correct please try again"
                     
                 return {
                     "valid": False,
